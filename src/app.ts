@@ -9,8 +9,26 @@ const app: Application = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.APP_URL || "http://localhost:3000",
+    origin: [
+      process.env.FRONTEND_URL || "http://localhost:3000",
+      process.env.BETTER_AUTH_URL || "http://localhost:5000",
+      "https://booknest-tau-virid.vercel.app",
+      "https://booknestserver-xi.vercel.app",
+    ],
     credentials: true,
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "better-auth-token",
+      "X-Better-Auth-Session-Token",
+      "x-better-auth-session-token",
+    ],
+    exposedHeaders: [
+      "Authorization",
+      "better-auth-token",
+      "X-Better-Auth-Session-Token",
+      "x-better-auth-session-token",
+    ],
   }),
 );
 

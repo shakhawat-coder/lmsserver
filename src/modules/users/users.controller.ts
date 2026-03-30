@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserService } from "./users.service";
 import { apiError, apiResponse } from "../../utils/apiResponse";
+import { uploadToCloudinary } from "../../config/multer.config";
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -22,7 +23,18 @@ const updateUser = async (req: Request, res: Response) => {
     }
 
     if (req.file) {
-      data.image = req.file.path;
+      // Upload image buffer to Cloudinary and store secure URL in user record
+      if (req.file.buffer) {
+        const cloudinaryUrl = await uploadToCloudinary(
+          req.file.buffer,
+          req.file.originalname,
+          "users",
+        );
+        data.image = cloudinaryUrl;
+      } else if (req.file.path) {
+        // Fallback if path is set for disk storage configuration
+        data.image = req.file.path;
+      }
     }
 
     const result = await UserService.updateUser(id as string, data);

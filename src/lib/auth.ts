@@ -59,6 +59,17 @@ export const auth = betterAuth({
       });
     },
   },
+  advanced: {
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
+      httpOnly: true,
+      path: "/",
+    },
+    crossSubDomainCookies: {
+      enabled: false,
+    },
+  },
   user: {
     additionalFields: {
       role: {
@@ -90,8 +101,5 @@ export const auth = betterAuth({
         input: false,
       },
     },
-  },
-  advanced: {
-    useSecureCookies: true, // Required for HTTPS/Production
   },
 });
