@@ -1,0 +1,21 @@
+model Book {
+  id           String  @id @default(uuid())
+  title        String
+  author       String
+  coverImage   String?
+  availability Boolean @default(true)
+  isbn         String?
+  language     String? @default("English")
+  year         String?
+  pages        Int?
+  description  String?
+
+  categoryId String
+  category   Category    @relation(fields: [categoryId], references: [id])
+  borrowings Borrowing[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("books")
+}

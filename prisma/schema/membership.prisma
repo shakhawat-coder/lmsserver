@@ -1,0 +1,44 @@
+model MembershipPlan {
+  id           String             @id @default(uuid())
+  name         MembershipPlanName
+  description  String             @default("")
+  price        Float
+  interval     String?
+  features     String[]
+  borrowLimit  Int
+  durationDays Int
+  memberships  Membership[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@map("membership_plans")
+}
+
+model Membership {
+  id               String           @id @default(uuid())
+  userId           String
+  user             User             @relation(fields: [userId], references: [id])
+  membershipPlanId String
+  membershipPlan   MembershipPlan   @relation(fields: [membershipPlanId], references: [id])
+  status           MembershipStatus @default(ACTIVE)
+  startDate        DateTime         @default(now())
+  endDate          DateTime?
+  price            Float            @default(0)
+  payments         Payment[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@map("memberships")
+}
+
+enum MembershipPlanName {
+  BASIC
+  SILVER
+  GOLD
+}
+
+enum MembershipStatus {
+  ACTIVE
+  INACTIVE
+  EXPIRED
+}

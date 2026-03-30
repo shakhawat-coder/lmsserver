@@ -1,0 +1,10 @@
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  image     String?
+  books     Book[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("categories")
+}
