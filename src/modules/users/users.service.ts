@@ -1,5 +1,5 @@
-import { prisma } from "../../app/lib/prisma";
-import { auth } from "../../app/lib/auth";
+import { auth } from "../../lib/auth";
+import { prisma } from "../../lib/prisma";
 
 export type IUser = {
   name: string;
@@ -61,20 +61,24 @@ const createAdmin = async (data: {
   password: string;
 }) => {
   // Check duplicate before calling auth
-  const existing = await prisma.user.findUnique({ where: { email: data.email } });
+  const existing = await prisma.user.findUnique({
+    where: { email: data.email },
+  });
   if (existing) {
     throw new Error(`User with email '${data.email}' already exists`);
   }
 
-  const result: any = await auth.api.signUpEmail({
-    body: data,
-    headers: new Headers({
-      Origin: process.env.BETTER_AUTH_URL || "http://localhost:5000",
-    }),
-  }).catch((err) => {
-    console.error("Critical error in Better Auth signUpEmail call:", err);
-    throw err;
-  });
+  const result: any = await auth.api
+    .signUpEmail({
+      body: data,
+      headers: new Headers({
+        Origin: process.env.BETTER_AUTH_URL || "http://localhost:5000",
+      }),
+    })
+    .catch((err) => {
+      console.error("Critical error in Better Auth signUpEmail call:", err);
+      throw err;
+    });
 
   if (!result || result.error) {
     console.error("Better Auth Sign-up Error Body:", result?.error);

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CategoryService } from "./category.service";
 import { apiError, apiResponse } from "../../utils/apiResponse";
+import { uploadToCloudinary } from "../../config/multer.config";
 
 const createCategory = async (req: Request, res: Response) => {
   try {
@@ -13,7 +14,16 @@ const createCategory = async (req: Request, res: Response) => {
 
     // Handle file upload
     if (req.file) {
-      data.image = req.file.path;
+      try {
+        const imageUrl = await uploadToCloudinary(
+          req.file.buffer,
+          req.file.originalname,
+          "categories",
+        );
+        data.image = imageUrl;
+      } catch (uploadErr) {
+        return apiError(res, 400, "Failed to upload image to Cloudinary");
+      }
     } else if (!req.file && req.body.image) {
       // If no file but image URL provided in body
       data.image = req.body.image;
@@ -31,6 +41,12 @@ const createCategory = async (req: Request, res: Response) => {
     }
     if ((req as any).fileValidationError) {
       return apiError(res, 400, (req as any).fileValidationError);
+    }
+
+    // Handle Prisma P2002 (Unique constraint violation)
+    if (err.code === 'P2002') {
+      const field = err.meta?.target?.[0] || 'field';
+      return apiError(res, 409, `A category with this ${field} already exists.`);
     }
 
     apiError(res, 500, err.message || "Failed to create category", err);
@@ -69,13 +85,29 @@ const updateCategory = async (req: Request, res: Response) => {
       data = req.body;
     }
 
+    // Handle file upload
     if (req.file) {
-      data.image = req.file.path;
+      try {
+        const imageUrl = await uploadToCloudinary(
+          req.file.buffer,
+          req.file.originalname,
+          "categories",
+        );
+        data.image = imageUrl;
+      } catch (uploadErr) {
+        return apiError(res, 400, "Failed to upload image to Cloudinary");
+      }
     }
 
     const result = await CategoryService.updateCategory(id as string, data);
     apiResponse(res, 200, "Category updated successfully", result);
   } catch (err: any) {
+    // Handle Prisma P2002 (Unique constraint violation)
+    if (err.code === 'P2002') {
+      const field = err.meta?.target?.[0] || 'field';
+      return apiError(res, 409, `A category with this ${field} already exists.`);
+    }
+
     apiError(res, 500, err.message || "Failed to update category", err);
   }
 };

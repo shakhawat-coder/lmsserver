@@ -4,7 +4,29 @@ import { apiError, apiResponse } from "../../utils/apiResponse";
 
 const createMembershipPlan = async (req: Request, res: Response) => {
   try {
-    const result = await MembershipPlanService.createMembershipPlan(req.body);
+    let data;
+    if (req.body.data) {
+      data = JSON.parse(req.body.data);
+    } else {
+      data = req.body;
+      // Parse numeric fields
+      if (typeof data.price === "string") data.price = parseFloat(data.price);
+      if (typeof data.borrowLimit === "string")
+        data.borrowLimit = parseInt(data.borrowLimit, 10);
+      if (typeof data.durationDays === "string")
+        data.durationDays = parseInt(data.durationDays, 10);
+      // Parse features array if it's a string
+      if (typeof data.features === "string") {
+        try {
+          data.features = JSON.parse(data.features);
+        } catch {
+          // If not valid JSON, treat as comma-separated string
+          data.features = data.features.split(",").map((f: string) => f.trim());
+        }
+      }
+    }
+
+    const result = await MembershipPlanService.createMembershipPlan(data);
     apiResponse(res, 201, "Membership plan created successfully", result);
   } catch (err: any) {
     apiError(res, 500, err.message || "Failed to create membership plan", err);
@@ -38,9 +60,31 @@ const getSingleMembershipPlan = async (req: Request, res: Response) => {
 const updateMembershipPlan = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    let data;
+    if (req.body.data) {
+      data = JSON.parse(req.body.data);
+    } else {
+      data = req.body;
+      // Parse numeric fields
+      if (typeof data.price === "string") data.price = parseFloat(data.price);
+      if (typeof data.borrowLimit === "string")
+        data.borrowLimit = parseInt(data.borrowLimit, 10);
+      if (typeof data.durationDays === "string")
+        data.durationDays = parseInt(data.durationDays, 10);
+      // Parse features array if it's a string
+      if (typeof data.features === "string") {
+        try {
+          data.features = JSON.parse(data.features);
+        } catch {
+          // If not valid JSON, treat as comma-separated string
+          data.features = data.features.split(",").map((f: string) => f.trim());
+        }
+      }
+    }
+
     const result = await MembershipPlanService.updateMembershipPlan(
       id as string,
-      req.body,
+      data,
     );
     apiResponse(res, 200, "Membership plan updated successfully", result);
   } catch (err: any) {

@@ -1,19 +1,37 @@
 import { Router } from "express";
 import { BookController } from "./book.controller";
-// import { upload } from "../../app/config/multer.config";
-// import { authMiddleware, authorizeRoles } from "../../app/middlewares/authMiddleware";
+import { upload } from "../../config/multer.config";
+import {
+  authMiddleware,
+  authorizeRoles,
+} from "../../middlewares/authMiddleware";
 
 const router = Router();
 
-// Publicly available routes
+// Public routes
 router.get("/", BookController.getAllBooks);
-router.post("/", BookController.createBook);
-
 router.get("/:id", BookController.getSingleBook);
 
-// Management routes requiring Admin/SuperAdmin privileges
-// router.post("/", authMiddleware, authorizeRoles("ADMIN", "SUPERADMIN"), upload.single("coverImage"), BookController.createBook);
-// router.patch("/:id", authMiddleware, authorizeRoles("ADMIN", "SUPERADMIN"), upload.single("coverImage"), BookController.updateBook);
-// router.delete("/:id", authMiddleware, authorizeRoles("ADMIN", "SUPERADMIN"), BookController.deleteBook);
+// Protected routes (ADMIN/SUPERADMIN only)
+router.post(
+  "/",
+  authMiddleware,
+  authorizeRoles("ADMIN", "SUPERADMIN"),
+  upload.single("coverImage"),
+  BookController.createBook,
+);
+router.patch(
+  "/:id",
+  authMiddleware,
+  authorizeRoles("ADMIN", "SUPERADMIN"),
+  upload.single("coverImage"),
+  BookController.updateBook,
+);
+router.delete(
+  "/:id",
+  authMiddleware,
+  authorizeRoles("ADMIN", "SUPERADMIN"),
+  BookController.deleteBook,
+);
 
 export const bookRouter = router;

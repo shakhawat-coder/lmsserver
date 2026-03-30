@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "./users.service";
-import { apiError, apiResponse } from "../../app/utils/apiResponse";
+import { apiError, apiResponse } from "../../utils/apiResponse";
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {

@@ -1,5 +1,4 @@
 import { v2 as cloudinary } from "cloudinary";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
 
 cloudinary.config({
@@ -8,16 +7,8 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET as string,
 });
 
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: async (req, file) => {
-    return {
-      folder: "uploads",
-      allowed_formats: ["jpg", "png", "jpeg", "webp"],
-      public_id: file.originalname.split(".")[0] + "-" + Date.now(),
-    };
-  },
-});
+// Use memory storage - files will be uploaded directly to Cloudinary
+const storage = multer.memoryStorage();
 
 const fileFilter = (
   req: any,
@@ -39,3 +30,29 @@ export const upload = multer({
     fileSize: 5 * 1024 * 1024, // 5MB limit
   },
 });
+
+// Helper function to upload buffer to Cloudinary
+export const uploadToCloudinary = async (
+  fileBuffer: Buffer,
+  fileName: string,
+  folder: string = "uploads",
+): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: folder,
+        public_id: fileName.split(".")[0] + "-" + Date.now(),
+        resource_type: "auto",
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result?.secure_url || "");
+        }
+      },
+    );
+
+    uploadStream.end(fileBuffer);
+  });
+};
