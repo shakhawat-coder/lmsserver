@@ -1,4 +1,4 @@
-import { prisma } from "../../app/lib/prisma";
+import { prisma } from "../../lib/prisma";
 import { initiateSSLCommerzPayment } from "./payment.utils";
 import crypto from "crypto";
 
@@ -11,7 +11,7 @@ interface InitiatePaymentData {
 
 const initiatePayment = async (data: InitiatePaymentData) => {
   console.log("Initiating payment for user:", data.userId);
-  
+
   const tran_id = `TXN_${crypto.randomBytes(8).toString("hex")}`;
 
   const user = await prisma.user.findUnique({
@@ -74,7 +74,10 @@ const initiatePayment = async (data: InitiatePaymentData) => {
   }
 };
 
-const handleSuccess = async (transactionId: string, membershipPlanId?: string) => {
+const handleSuccess = async (
+  transactionId: string,
+  membershipPlanId?: string,
+) => {
   const payment = await prisma.payment.findUnique({
     where: { transactionId },
   });
@@ -106,7 +109,9 @@ const handleSuccess = async (transactionId: string, membershipPlanId?: string) =
           membershipPlanId: membershipPlanId,
           status: "ACTIVE",
           startDate: new Date(),
-          endDate: new Date(Date.now() + plan.durationDays * 24 * 60 * 60 * 1000),
+          endDate: new Date(
+            Date.now() + plan.durationDays * 24 * 60 * 60 * 1000,
+          ),
           price: payment.amount,
         },
       });
