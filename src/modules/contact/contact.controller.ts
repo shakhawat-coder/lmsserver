@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ContactService } from "./contact.service";
-import { apiError, apiResponse } from "../../app/utils/apiResponse";
+import { apiError, apiResponse } from "../../utils/apiResponse";
 
 const createContactMessage = async (req: Request, res: Response) => {
   try {
