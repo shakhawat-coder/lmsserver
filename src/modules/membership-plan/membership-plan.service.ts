@@ -1,7 +1,7 @@
-import { prisma } from "../../app/lib/prisma";
+import { prisma } from "../../lib/prisma";
 
 export type IMembershipPlan = {
-  name: "BASIC" | "SILVER" | "GOLD"; 
+  name: "BASIC" | "SILVER" | "GOLD";
   description: string;
   price: number;
   interval?: string;
@@ -35,7 +35,7 @@ const getSingleMembershipPlan = async (id: string) => {
 
 const updateMembershipPlan = async (
   id: string,
-  data: Partial<IMembershipPlan>
+  data: Partial<IMembershipPlan>,
 ) => {
   const result = await prisma.membershipPlan.update({
     where: { id },

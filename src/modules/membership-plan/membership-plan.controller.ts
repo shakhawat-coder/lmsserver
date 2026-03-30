@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { MembershipPlanService } from "./membership-plan.service";
-import { apiError, apiResponse } from "../../app/utils/apiResponse";
+import { apiError, apiResponse } from "../../utils/apiResponse";
 
 const createMembershipPlan = async (req: Request, res: Response) => {
   try {
@@ -24,7 +24,7 @@ const getSingleMembershipPlan = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const result = await MembershipPlanService.getSingleMembershipPlan(
-      id as string
+      id as string,
     );
     if (!result) {
       return apiError(res, 404, "Membership plan not found");
@@ -40,7 +40,7 @@ const updateMembershipPlan = async (req: Request, res: Response) => {
     const { id } = req.params;
     const result = await MembershipPlanService.updateMembershipPlan(
       id as string,
-      req.body
+      req.body,
     );
     apiResponse(res, 200, "Membership plan updated successfully", result);
   } catch (err: any) {
@@ -52,7 +52,7 @@ const deleteMembershipPlan = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const result = await MembershipPlanService.deleteMembershipPlan(
-      id as string
+      id as string,
     );
     apiResponse(res, 200, "Membership plan deleted successfully", result);
   } catch (err: any) {
