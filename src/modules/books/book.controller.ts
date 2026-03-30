@@ -14,9 +14,9 @@ const createBook = async (req: Request, res: Response) => {
         data.availability = data.availability === "true";
     }
 
-    if (req.file) {
-      data.coverImage = req.file.path;
-    }
+    // if (req.file) {
+    //   data.coverImage = req.file.path;
+    // }
 
     const result = await BookService.createBook(data);
     apiResponse(res, 201, "Book created successfully", result);
@@ -58,9 +58,9 @@ const updateBook = async (req: Request, res: Response) => {
       if (typeof data.pages === "string") data.pages = parseInt(data.pages, 10);
     }
 
-    if (req.file) {
-      data.coverImage = req.file.path;
-    }
+    // if (req.file) {
+    //   data.coverImage = req.file.path;
+    // }
 
     const result = await BookService.updateBook(id as string, data);
     apiResponse(res, 200, "Book updated successfully", result);
