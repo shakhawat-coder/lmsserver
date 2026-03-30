@@ -1,4 +1,4 @@
-import { prisma } from "../../app/lib/prisma";
+import { prisma } from "../../lib/prisma";
 
 export type IMembership = {
   userId: string;
@@ -96,7 +96,7 @@ const updateMembership = async (id: string, data: Partial<IMembership>) => {
 
   // Remove undefined properties to satisfy exactOptionalPropertyTypes
   Object.keys(updateData).forEach(
-    (key) => updateData[key] === undefined && delete updateData[key]
+    (key) => updateData[key] === undefined && delete updateData[key],
   );
 
   const result = await prisma.membership.update({

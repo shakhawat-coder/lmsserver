@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { MembershipService } from "./membership.service";
-import { apiError, apiResponse } from "../../app/utils/apiResponse";
+import { apiError, apiResponse } from "../../utils/apiResponse";
 
 const createMembership = async (req: Request, res: Response) => {
   try {
@@ -36,7 +36,9 @@ const getSingleMembership = async (req: Request, res: Response) => {
 const getMembershipByUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const result = await MembershipService.getMembershipByUser(userId as string);
+    const result = await MembershipService.getMembershipByUser(
+      userId as string,
+    );
     apiResponse(res, 200, "User memberships fetched successfully", result);
   } catch (err: any) {
     apiError(res, 500, err.message || "Failed to fetch user memberships", err);
@@ -46,7 +48,10 @@ const getMembershipByUser = async (req: Request, res: Response) => {
 const updateMembership = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const result = await MembershipService.updateMembership(id as string, req.body);
+    const result = await MembershipService.updateMembership(
+      id as string,
+      req.body,
+    );
     apiResponse(res, 200, "Membership updated successfully", result);
   } catch (err: any) {
     apiError(res, 500, err.message || "Failed to update membership", err);
@@ -71,7 +76,12 @@ const getMyMembership = async (req: Request, res: Response) => {
     }
     const result = await MembershipService.getMembershipByUser(userId);
     // Return the latest one if it exists
-    apiResponse(res, 200, "My membership fetched successfully", result[0] || null);
+    apiResponse(
+      res,
+      200,
+      "My membership fetched successfully",
+      result[0] || null,
+    );
   } catch (err: any) {
     apiError(res, 500, err.message || "Failed to fetch my membership", err);
   }
