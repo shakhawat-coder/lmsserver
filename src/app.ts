@@ -16,17 +16,17 @@ app.use(
 
 // app.all("/api/auth/*splat", toNodeHandler(auth));
 
-// Enable URL-encoded form data parsing
-app.use(express.urlencoded({ extended: true }));
+// Important: Place multer routes BEFORE body parsers for multipart/form-data
+app.use("/api/v1", IndexRoutes);
 
-// Middleware to parse JSON bodies
+// Middleware to parse JSON bodies (after multer routes)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 // Basic route
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript + Express!");
 });
-app.use("/api/v1", IndexRoutes);
 
 // Global Error Handler
 app.use((err: any, req: Request, res: Response, next: express.NextFunction) => {
