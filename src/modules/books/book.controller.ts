@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { BookService } from "./book.service";
-import { apiError, apiResponse } from "../../app/utils/apiResponse";
+import { apiError, apiResponse } from "../../utils/apiResponse";
 
 const createBook = async (req: Request, res: Response) => {
   try {
@@ -10,7 +10,8 @@ const createBook = async (req: Request, res: Response) => {
     } else {
       data = req.body;
       if (typeof data.pages === "string") data.pages = parseInt(data.pages, 10);
-      if (typeof data.availability === "string") data.availability = data.availability === "true";
+      if (typeof data.availability === "string")
+        data.availability = data.availability === "true";
     }
 
     if (req.file) {
