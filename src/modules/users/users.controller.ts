@@ -5,7 +5,8 @@ import { uploadToCloudinary } from "../../config/multer.config";
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const result = await UserService.getAllUsers();
+    const currentUserRole = (req as any).user?.role;
+    const result = await UserService.getAllUsers(currentUserRole);
     apiResponse(res, 200, "Users fetched successfully", result);
   } catch (err: any) {
     apiError(res, 500, err.message || "Failed to fetch users", err);

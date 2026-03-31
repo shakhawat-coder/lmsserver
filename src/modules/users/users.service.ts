@@ -11,12 +11,18 @@ export type IUser = {
   isDeleted: boolean;
 };
 
-const getAllUsers = async () => {
+const getAllUsers = async (currentUserRole?: string) => {
+  const whereCondition: any = {
+    isDeleted: false,
+  };
+
+  // If not SUPERADMIN, only show regular users
+  if (currentUserRole !== "SUPERADMIN") {
+    whereCondition.role = "USER";
+  }
+
   const result = await prisma.user.findMany({
-    where: {
-      isDeleted: false,
-      role: "USER",
-    },
+    where: whereCondition,
     select: {
       id: true,
       name: true,
