@@ -41,9 +41,88 @@ app.all("/api/auth/*splat", toNodeHandler(auth));
 // Important: Place multer routes BEFORE body parsers for multipart/form-data
 app.use("/api/v1", IndexRoutes);
 
-// Basic route
+// Welcome route with a modern, centered message
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello, TypeScript + Express!");
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>BookNest | API Welcome</title>
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+      <style>
+        :root {
+          --primary: #6366f1;
+          --secondary: #a855f7;
+          --bg: #0f172a;
+          --text: #f8fafc;
+        }
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        body {
+          font-family: 'Outfit', sans-serif;
+          background: radial-gradient(circle at top left, #1e293b, #0f172a);
+          color: var(--text);
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        }
+        .glass-card {
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 3rem;
+          border-radius: 24px;
+          text-align: center;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+          animation: fadeIn 0.8s ease-out;
+        }
+        h1 {
+          font-size: 3rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+          background: linear-gradient(to right, #818cf8, #c084fc);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        p {
+          font-size: 1.1rem;
+          color: #94a3b8;
+          max-width: 400px;
+          line-height: 1.6;
+        }
+        .badge {
+          display: inline-block;
+          margin-bottom: 1.5rem;
+          padding: 0.5rem 1rem;
+          background: rgba(99, 102, 241, 0.1);
+          color: #818cf8;
+          border-radius: 9999px;
+          font-size: 0.875rem;
+          font-weight: 600;
+          border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="glass-card">
+        <div class="badge">Backend Active</div>
+        <h1>Welcome to BookNest</h1>
+        <p>The core engine of your library management system is running smoothly. Ready to serve your requests.</p>
+      </div>
+    </body>
+    </html>
+  `);
 });
 
 // Global Error Handler
