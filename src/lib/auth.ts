@@ -9,6 +9,8 @@ export const auth = betterAuth({
   }),
   // URL of your auth server
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:5000",
+  // URL of your frontend
+  appURL: process.env.FRONTEND_URL || "http://localhost:3000",
   // Enable debug logging to see what Better Auth is doing
   logger: {
     level: "debug",
@@ -33,6 +35,7 @@ export const auth = betterAuth({
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
+    redirectTo: process.env.FRONTEND_URL || "http://localhost:3000",
     sendVerificationEmail: async ({ user, url, token }, request) => {
       console.log(
         `📧 Attempting to send verification email to: ${user.email}...`,
