@@ -10,6 +10,7 @@ import { contactRouter } from "../modules/contact/contact.router";
 import { borrowingRouter } from "../modules/borrowing/borrowing.router";
 
 import { bannerRouter } from "../modules/banner/banner.router";
+import { blogRouter } from "../modules/blog/blog.router";
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use("/membership-plans", membershipPlanRouter);
 router.use("/payments", paymentRouter);
 router.use("/contact", contactRouter);
 router.use("/banners", bannerRouter);
+router.use("/blogs", blogRouter);
 
 export const IndexRoutes = router;
