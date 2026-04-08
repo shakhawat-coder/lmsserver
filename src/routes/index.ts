@@ -11,6 +11,7 @@ import { borrowingRouter } from "../modules/borrowing/borrowing.router";
 
 import { bannerRouter } from "../modules/banner/banner.router";
 import { blogRouter } from "../modules/blog/blog.router";
+import { ChatRouter } from "../modules/chat/chat.router";
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use("/payments", paymentRouter);
 router.use("/contact", contactRouter);
 router.use("/banners", bannerRouter);
 router.use("/blogs", blogRouter);
+router.use("/chat", ChatRouter);
 
 export const IndexRoutes = router;

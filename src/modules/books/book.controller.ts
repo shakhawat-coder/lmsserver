@@ -57,7 +57,7 @@ const createBook = async (req: Request, res: Response) => {
 
 const getAllBooks = async (req: Request, res: Response) => {
   try {
-    const result = await BookService.getAllBooks();
+    const result = await BookService.getAllBooks(req.query);
     apiResponse(res, 200, "Books fetched successfully", result);
   } catch (err: any) {
     apiError(res, 500, err.message || "Failed to fetch books", err);
