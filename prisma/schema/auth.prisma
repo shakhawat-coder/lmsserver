@@ -17,6 +17,9 @@ model User {
   payments      Payment[]
   borrowings    Borrowing[]
 
+  passwordResetOTP        String?
+  passwordResetOTPExpires DateTime?
+
   @@unique([email])
   @@map("user")
 }

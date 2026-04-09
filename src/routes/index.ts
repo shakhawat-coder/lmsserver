@@ -12,6 +12,7 @@ import { borrowingRouter } from "../modules/borrowing/borrowing.router";
 import { bannerRouter } from "../modules/banner/banner.router";
 import { blogRouter } from "../modules/blog/blog.router";
 import { ChatRouter } from "../modules/chat/chat.router";
+import { statisticsRouter } from "../modules/statistics/statistics.router";
 
 const router = Router();
 
@@ -26,5 +27,6 @@ router.use("/contact", contactRouter);
 router.use("/banners", bannerRouter);
 router.use("/blogs", blogRouter);
 router.use("/chat", ChatRouter);
+router.use("/statistics", statisticsRouter);
 
 export const IndexRoutes = router;

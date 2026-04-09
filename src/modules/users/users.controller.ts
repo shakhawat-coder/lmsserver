@@ -65,9 +65,42 @@ const createAdmin = async (req: Request, res: Response) => {
   }
 };
 
+const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    const result = await UserService.forgotPassword(email);
+    apiResponse(res, 200, result.message, result);
+  } catch (err: any) {
+    apiError(res, 400, err.message || "Failed to send OTP", err);
+  }
+};
+
+const verifyOTP = async (req: Request, res: Response) => {
+  try {
+    const { email, otp } = req.body;
+    const result = await UserService.verifyOTP(email, otp);
+    apiResponse(res, 200, result.message, result);
+  } catch (err: any) {
+    apiError(res, 400, err.message || "Invalid or expired OTP", err);
+  }
+};
+
+const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const { email, otp, password } = req.body;
+    const result = await UserService.resetPassword(email, otp, password);
+    apiResponse(res, 200, result.message, result);
+  } catch (err: any) {
+    apiError(res, 400, err.message || "Failed to reset password", err);
+  }
+};
+
 export const UserController = {
   getAllUsers,
   updateUser,
   softDeleteUser,
   createAdmin,
+  forgotPassword,
+  verifyOTP,
+  resetPassword,
 };

@@ -8,6 +8,11 @@ import { upload } from "../../config/multer.config";
 
 const router = express.Router();
 
+// Public auth routes
+router.post("/forgot-password", UserController.forgotPassword);
+router.post("/verify-otp", UserController.verifyOTP);
+router.post("/reset-password", UserController.resetPassword);
+
 // All routes below require a valid session
 router.use(authMiddleware);
 
